@@ -41,7 +41,7 @@
 		topicsText: document.getElementById('topicsText')
 	};
 
-	const INVOICE_URL = 'PASTE_YOUR_TELEGRAM_STARS_INVOICE_LINK_HERE';
+	const INVOICE_URL = 'https://t.me/$zPNiXAv-8Ui9EQAAum5o32fZYwg';
 
 	function applyThemeFromTelegram() {
 		if (!tg) return;
@@ -108,6 +108,13 @@
 		if (state.chart) {
 			state.chart.update();
 		}
+		
+		// Принудительно обновляем стили
+		setTimeout(() => {
+			document.body.style.display = 'none';
+			document.body.offsetHeight; // Trigger reflow
+			document.body.style.display = '';
+		}, 10);
 	}
 
 	function switchTab(tab) {
@@ -284,8 +291,16 @@
 			options: {
 				plugins: { legend: { display: false } },
 				scales: {
-					y: { suggestedMin: -3, suggestedMax: 3, grid: { color: getCss('--border') || '#232427' } },
-					x: { grid: { display: false } }
+					y: { 
+						suggestedMin: -3, 
+						suggestedMax: 3, 
+						grid: { color: getCss('--border') || '#232427' },
+						ticks: { color: getCss('--text') || '#eaeaea' }
+					},
+					x: { 
+						grid: { display: false },
+						ticks: { color: getCss('--text') || '#eaeaea' }
+					}
 				}
 			}
 		});

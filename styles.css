@@ -26,6 +26,102 @@
 	--button-bg: #f1f3f4;
 }
 
+/* Улучшенные цвета для лучшей контрастности */
+:root[data-theme="light"] .ghost {
+	background: var(--button-bg) !important;
+	color: var(--text) !important;
+	border-color: var(--border) !important;
+}
+
+:root[data-theme="light"] .tab {
+	background: var(--card) !important;
+	color: var(--text) !important;
+	border-color: var(--border) !important;
+}
+
+:root[data-theme="light"] .tab.active {
+	outline-color: var(--primary) !important;
+}
+
+:root[data-theme="light"] .card {
+	background: var(--card) !important;
+	border-color: var(--border) !important;
+}
+
+:root[data-theme="light"] textarea {
+	background: var(--input-bg) !important;
+	color: var(--text) !important;
+	border-color: var(--border) !important;
+}
+
+:root[data-theme="light"] .mood-btn {
+	background: var(--button-bg) !important;
+	color: var(--text) !important;
+	border-color: var(--border) !important;
+}
+
+:root[data-theme="light"] .chips .chip {
+	background: var(--button-bg) !important;
+	color: var(--text) !important;
+	border-color: var(--border) !important;
+}
+
+:root[data-theme="light"] .list li {
+	border-color: var(--border) !important;
+}
+
+:root[data-theme="light"] .list li .meta {
+	color: var(--muted) !important;
+}
+
+/* Улучшения для темной темы */
+:root .ghost {
+	background: var(--button-bg) !important;
+	color: var(--text) !important;
+	border-color: var(--border) !important;
+}
+
+:root .tab {
+	background: var(--card) !important;
+	color: var(--text) !important;
+	border-color: var(--border) !important;
+}
+
+:root .tab.active {
+	outline-color: var(--primary) !important;
+}
+
+:root .card {
+	background: var(--card) !important;
+	border-color: var(--border) !important;
+}
+
+:root textarea {
+	background: var(--input-bg) !important;
+	color: var(--text) !important;
+	border-color: var(--border) !important;
+}
+
+:root .mood-btn {
+	background: var(--button-bg) !important;
+	color: var(--text) !important;
+	border-color: var(--border) !important;
+}
+
+:root .chips .chip {
+	background: var(--button-bg) !important;
+	color: var(--text) !important;
+	border-color: var(--border) !important;
+}
+
+:root .list li {
+	border-color: var(--border) !important;
+}
+
+:root .list li .meta {
+	color: var(--muted) !important;
+}
+
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 body {

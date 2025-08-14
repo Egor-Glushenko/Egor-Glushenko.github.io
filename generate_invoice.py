@@ -10,7 +10,7 @@ import sys
 def create_invoice_link(bot_token):
     """Создает инвойс для Telegram Stars"""
     
-    url = f"https://api.telegram.org/bot{8153174551:AAEBDjT04MrE2a6F85FWBWzTSFVxEINJ2j8}/createInvoiceLink"
+    url = f"https://api.telegram.org/bot{bot_token}/createInvoiceLink"
     
     payload = {
         "title": "Daily Tracker Premium",
