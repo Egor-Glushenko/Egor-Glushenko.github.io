@@ -109,12 +109,16 @@
 			state.chart.update();
 		}
 		
-		// Принудительно обновляем стили
-		setTimeout(() => {
-			document.body.style.display = 'none';
-			document.body.offsetHeight; // Trigger reflow
-			document.body.style.display = '';
-		}, 10);
+		// Принудительно обновляем стили для корректного применения темы
+		requestAnimationFrame(() => {
+			// Пересоздаем элементы для применения новых стилей
+			const elements = document.querySelectorAll('.card, .tab, .ghost, .mood-btn, .chips .chip');
+			elements.forEach(el => {
+				el.style.transition = 'none';
+				el.offsetHeight; // Force reflow
+				el.style.transition = '';
+			});
+		});
 	}
 
 	function switchTab(tab) {
@@ -285,21 +289,42 @@
 					borderColor: getCss('--primary') || '#2ea6ff',
 					backgroundColor: 'transparent',
 					tension: 0.3,
-					pointRadius: 2
+					pointRadius: 2,
+					pointBackgroundColor: getCss('--primary') || '#2ea6ff',
+					pointBorderColor: getCss('--bg') || '#0f0f10'
 				}]
 			},
 			options: {
-				plugins: { legend: { display: false } },
+				responsive: true,
+				maintainAspectRatio: false,
+				plugins: { 
+					legend: { display: false } 
+				},
 				scales: {
 					y: { 
 						suggestedMin: -3, 
 						suggestedMax: 3, 
-						grid: { color: getCss('--border') || '#232427' },
-						ticks: { color: getCss('--text') || '#eaeaea' }
+						grid: { 
+							color: getCss('--border') || '#232427',
+							drawBorder: false
+						},
+						ticks: { 
+							color: getCss('--text') || '#eaeaea',
+							font: { size: 12 }
+						},
+						border: {
+							color: getCss('--border') || '#232427'
+						}
 					},
 					x: { 
 						grid: { display: false },
-						ticks: { color: getCss('--text') || '#eaeaea' }
+						ticks: { 
+							color: getCss('--text') || '#eaeaea',
+							font: { size: 12 }
+						},
+						border: {
+							color: getCss('--border') || '#232427'
+						}
 					}
 				}
 			}
