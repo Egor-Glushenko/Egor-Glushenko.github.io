@@ -44,23 +44,9 @@
 	const INVOICE_URL = 'https://t.me/$zPNiXAv-8Ui9EQAAum5o32fZYwg';
 
 	function applyThemeFromTelegram() {
-		if (!tg) return;
-		const p = tg.themeParams || {};
-		// Применяем тему Telegram только если пользователь не выбрал свою
-		if (state.theme === 'dark' || state.theme === 'light') {
-			return; // Используем пользовательскую тему
-		}
-		
-		const cssVars = {
-			'--bg': p.bg_color ? `#${p.bg_color}` : null,
-			'--text': p.text_color ? `#${p.text_color}` : null,
-			'--card': p.secondary_bg_color ? `#${p.secondary_bg_color}` : null,
-			'--border': p.hint_color ? `#${p.hint_color}33` : null,
-			'--primary': p.button_color ? `#${p.button_color}` : null
-		};
-		Object.entries(cssVars).forEach(([k, v]) => {
-			if (v) document.documentElement.style.setProperty(k, v);
-		});
+		// Отключаем автоматическое применение темы Telegram
+		// Теперь используются только наши 2 темы
+		return;
 	}
 
 	function load() {
@@ -94,31 +80,16 @@
 		if (theme === 'light') {
 			document.documentElement.setAttribute('data-theme', 'light');
 			els.themeBtn.textContent = '🌙';
-		} else if (theme === 'dark') {
+		} else {
+			// dark theme
 			document.documentElement.removeAttribute('data-theme');
 			els.themeBtn.textContent = '☀️';
-		} else {
-			// 'auto' - используем тему Telegram
-			document.documentElement.removeAttribute('data-theme');
-			els.themeBtn.textContent = '🔄';
-			applyThemeFromTelegram();
 		}
 		
 		// Обновляем график если он есть
 		if (state.chart) {
 			state.chart.update();
 		}
-		
-		// Принудительно обновляем стили для корректного применения темы
-		requestAnimationFrame(() => {
-			// Пересоздаем элементы для применения новых стилей
-			const elements = document.querySelectorAll('.card, .tab, .ghost, .mood-btn, .chips .chip');
-			elements.forEach(el => {
-				el.style.transition = 'none';
-				el.offsetHeight; // Force reflow
-				el.style.transition = '';
-			});
-		});
 	}
 
 	function switchTab(tab) {
@@ -501,14 +472,7 @@
 	}
 
 	function toggleTheme() {
-		let newTheme;
-		if (state.theme === 'dark') {
-			newTheme = 'light';
-		} else if (state.theme === 'light') {
-			newTheme = 'auto';
-		} else {
-			newTheme = 'dark';
-		}
+		const newTheme = state.theme === 'dark' ? 'light' : 'dark';
 		setTheme(newTheme);
 		if (tg && tg.HapticFeedback) {
 			tg.HapticFeedback.impactOccurred('light');
