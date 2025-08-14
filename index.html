@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ru">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<title>Daily Tracker</title>
+	<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+	<link rel="stylesheet" href="styles.css" />
+	<script src="https://telegram.org/js/telegram-web-app.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/wordcloud@1.2.2/src/wordcloud2.js"></script>
+</head>
+<body>
+	<div id="app">
+		<header class="app-header">
+			<div class="brand">Daily Tracker</div>
+			<button id="exportBtn" class="ghost">Экспорт PDF</button>
+		</header>
+
+		<nav class="tabs">
+			<button class="tab active" data-tab="today">Сегодня</button>
+			<button class="tab" data-tab="history">История</button>
+			<button class="tab" data-tab="analytics">Аналитика</button>
+			<button class="tab" data-tab="premium">Премиум</button>
+		</nav>
+
+		<main class="views">
+			<section id="view-today" class="view active">
+				<div class="card stack">
+					<label for="entry" class="label">Что хорошего случилось?</label>
+					<textarea id="entry" rows="5" placeholder="Например: Встретился с друзьями, пил #кофе, сделал прогресс по #работа"></textarea>
+					<div id="moodSlider" class="mood">
+						<button class="mood-btn" data-mood="sad" aria-label="Плохо">😢</button>
+						<button class="mood-btn active" data-mood="neutral" aria-label="Нормально">😐</button>
+						<button class="mood-btn" data-mood="happy" aria-label="Хорошо">😊</button>
+					</div>
+					<button id="saveBtn" class="primary">Сохранить</button>
+				</div>
+			</section>
+
+			<section id="view-history" class="view">
+				<div class="card">
+					<div id="calendar" class="calendar"></div>
+				</div>
+				<div class="card">
+					<div class="filter-bar">
+						<div id="tagFilters" class="chips"></div>
+					</div>
+					<ul id="entriesList" class="list"></ul>
+				</div>
+			</section>
+
+			<section id="view-analytics" class="view">
+				<div class="card">
+					<canvas id="moodChart" height="140"></canvas>
+				</div>
+				<div class="card">
+					<div id="wordCloud" class="word-cloud"></div>
+				</div>
+				<div class="card two-col premium-only">
+					<div>
+						<h3>Пики продуктивности</h3>
+						<p id="peaksText">Доступно в Премиум</p>
+					</div>
+					<div>
+						<h3>Частые темы</h3>
+						<p id="topicsText">Доступно в Премиум</p>
+					</div>
+				</div>
+			</section>
+
+			<section id="view-premium" class="view">
+				<div class="card stack">
+					<h2>Премиум</h2>
+					<ul class="benefits">
+						<li>Шаблоны: «Для отношений», «Фитнес-трекер»</li>
+						<li>Продвинутая аналитика: пики продуктивности</li>
+						<li>Экспорт расширенных отчетов</li>
+					</ul>
+					<div class="buy-row">
+						<div class="price">100 ⭐</div>
+						<button id="buyPremiumBtn" class="primary">Купить</button>
+					</div>
+					<p id="premiumStatus" class="muted">Статус: Стандарт</p>
+				</div>
+			</section>
+		</main>
+	</div>
+
+	<script src="app.js"></script>
+</body>
+</html> 
