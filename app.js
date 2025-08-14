@@ -46,6 +46,11 @@
 	function applyThemeFromTelegram() {
 		if (!tg) return;
 		const p = tg.themeParams || {};
+		// Применяем тему Telegram только если пользователь не выбрал свою
+		if (state.theme === 'dark' || state.theme === 'light') {
+			return; // Используем пользовательскую тему
+		}
+		
 		const cssVars = {
 			'--bg': p.bg_color ? `#${p.bg_color}` : null,
 			'--text': p.text_color ? `#${p.text_color}` : null,
@@ -84,8 +89,25 @@
 	function setTheme(theme) {
 		state.theme = theme;
 		localStorage.setItem('theme', theme);
-		document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : '');
-		els.themeBtn.textContent = theme === 'light' ? '🌙' : '☀️';
+		
+		// Устанавливаем тему
+		if (theme === 'light') {
+			document.documentElement.setAttribute('data-theme', 'light');
+			els.themeBtn.textContent = '🌙';
+		} else if (theme === 'dark') {
+			document.documentElement.removeAttribute('data-theme');
+			els.themeBtn.textContent = '☀️';
+		} else {
+			// 'auto' - используем тему Telegram
+			document.documentElement.removeAttribute('data-theme');
+			els.themeBtn.textContent = '🔄';
+			applyThemeFromTelegram();
+		}
+		
+		// Обновляем график если он есть
+		if (state.chart) {
+			state.chart.update();
+		}
 	}
 
 	function switchTab(tab) {
@@ -387,8 +409,39 @@
 		const botUsername = tg ? tg.initDataUnsafe?.user?.username || 'your_bot' : 'your_bot';
 		const shareText = `📱 Daily Tracker — Персональный дневник достижений и настроения\n\n✨ Быстрый ввод заметок\n📊 Аналитика и графики\n📅 Календарь истории\n💎 Премиум функции\n\nПопробуй: @${botUsername}`;
 		
-		if (tg && tg.shareUrl) {
-			tg.shareUrl(shareText);
+		if (tg && tg.switchInlineQuery) {
+			// Открывает список чатов для пересылки
+			tg.switchInlineQuery(shareText, ['users', 'groups', 'channels']);
+		} else if (tg && tg.showPopup) {
+			// Показываем меню выбора способа поделиться
+			tg.showPopup({
+				title: 'Поделиться ботом',
+				message: 'Выберите способ:',
+				buttons: [
+					{ type: 'default', text: 'Скопировать ссылку' },
+					{ type: 'default', text: 'Поделиться текстом' },
+					{ type: 'cancel', text: 'Отмена' }
+				]
+			}, (buttonId) => {
+				if (buttonId === 0) {
+					// Копируем ссылку на бота
+					const botLink = `https://t.me/${botUsername}`;
+					if (navigator.clipboard) {
+						navigator.clipboard.writeText(botLink);
+						showToast('Ссылка скопирована');
+					} else {
+						showToast('Ссылка: ' + botLink);
+					}
+				} else if (buttonId === 1) {
+					// Копируем текст
+					if (navigator.clipboard) {
+						navigator.clipboard.writeText(shareText);
+						showToast('Текст скопирован');
+					} else {
+						showToast('Текст скопирован в буфер');
+					}
+				}
+			});
 		} else if (navigator.share) {
 			navigator.share({
 				title: 'Daily Tracker',
@@ -408,7 +461,14 @@
 	}
 
 	function toggleTheme() {
-		const newTheme = state.theme === 'dark' ? 'light' : 'dark';
+		let newTheme;
+		if (state.theme === 'dark') {
+			newTheme = 'light';
+		} else if (state.theme === 'light') {
+			newTheme = 'auto';
+		} else {
+			newTheme = 'dark';
+		}
 		setTheme(newTheme);
 		if (tg && tg.HapticFeedback) {
 			tg.HapticFeedback.impactOccurred('light');

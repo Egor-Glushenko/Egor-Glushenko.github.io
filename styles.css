@@ -8,6 +8,8 @@
 	--ok: #27ae60;
 	--warn: #f2c94c;
 	--bad: #eb5757;
+	--input-bg: #0c0d0e;
+	--button-bg: #0c0d0e;
 }
 
 :root[data-theme="light"] {
@@ -20,6 +22,8 @@
 	--ok: #27ae60;
 	--warn: #f2c94c;
 	--bad: #eb5757;
+	--input-bg: #ffffff;
+	--button-bg: #f1f3f4;
 }
 
 * { box-sizing: border-box; }
@@ -73,7 +77,7 @@ textarea {
 	width: 100%;
 	resize: vertical;
 	min-height: 120px;
-	background: var(--card);
+	background: var(--input-bg);
 	color: var(--text);
 	border: 1px solid var(--border);
 	border-radius: 12px;
@@ -81,7 +85,7 @@ textarea {
 }
 
 .mood { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.mood-btn { border: 1px solid var(--border); background: var(--card); color: var(--text); border-radius: 12px; padding: 10px 0; font-size: 22px; }
+.mood-btn { border: 1px solid var(--border); background: var(--button-bg); color: var(--text); border-radius: 12px; padding: 10px 0; font-size: 22px; }
 .mood-btn.active { outline: 2px solid var(--primary); }
 
 .primary { background: var(--primary); color: #fff; border: none; border-radius: 12px; padding: 12px 16px; font-weight: 600; }
@@ -95,7 +99,7 @@ textarea {
 .calendar .day.bad { background: rgba(235, 87, 87, 0.12); }
 
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chips .chip { border: 1px solid var(--border); color: var(--text); background: var(--card); padding: 8px 10px; border-radius: 999px; font-size: 12px; }
+.chips .chip { border: 1px solid var(--border); color: var(--text); background: var(--button-bg); padding: 8px 10px; border-radius: 999px; font-size: 12px; }
 .chips .chip.active { outline: 2px solid var(--primary); }
 
 .list { list-style: none; padding: 0; margin: 0; }
