@@ -10,7 +10,8 @@
 		premium: false,
 		activeTab: 'today',
 		filters: new Set(),
-		chart: null
+		chart: null,
+		theme: 'dark'
 	};
 
 	const els = {
@@ -26,6 +27,8 @@
 		moodBtns: Array.from(document.querySelectorAll('.mood-btn')),
 		saveBtn: document.getElementById('saveBtn'),
 		exportBtn: document.getElementById('exportBtn'),
+		themeBtn: document.getElementById('themeBtn'),
+		shareBtn: document.getElementById('shareBtn'),
 		calendar: document.getElementById('calendar'),
 		tagFilters: document.getElementById('tagFilters'),
 		entriesList: document.getElementById('entriesList'),
@@ -59,9 +62,11 @@
 		try {
 			state.entries = JSON.parse(localStorage.getItem('diary') || '[]');
 			state.premium = localStorage.getItem('premium') === 'true';
+			state.theme = localStorage.getItem('theme') || 'dark';
 		} catch (e) {
 			state.entries = [];
 			state.premium = false;
+			state.theme = 'dark';
 		}
 	}
 
@@ -74,6 +79,13 @@
 		localStorage.setItem('premium', state.premium ? 'true' : 'false');
 		els.premiumStatus.textContent = `Статус: ${state.premium ? 'Премиум' : 'Стандарт'}`;
 		els.premiumBlocks.forEach(b => b.classList.toggle('unlocked', state.premium));
+	}
+
+	function setTheme(theme) {
+		state.theme = theme;
+		localStorage.setItem('theme', theme);
+		document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : '');
+		els.themeBtn.textContent = theme === 'light' ? '🌙' : '☀️';
 	}
 
 	function switchTab(tab) {
@@ -371,6 +383,38 @@
 		}
 	}
 
+	function shareBot() {
+		const botUsername = tg ? tg.initDataUnsafe?.user?.username || 'your_bot' : 'your_bot';
+		const shareText = `📱 Daily Tracker — Персональный дневник достижений и настроения\n\n✨ Быстрый ввод заметок\n📊 Аналитика и графики\n📅 Календарь истории\n💎 Премиум функции\n\nПопробуй: @${botUsername}`;
+		
+		if (tg && tg.shareUrl) {
+			tg.shareUrl(shareText);
+		} else if (navigator.share) {
+			navigator.share({
+				title: 'Daily Tracker',
+				text: shareText,
+				url: window.location.href
+			});
+		} else {
+			// Fallback для браузеров без Web Share API
+			const textArea = document.createElement('textarea');
+			textArea.value = shareText;
+			document.body.appendChild(textArea);
+			textArea.select();
+			document.execCommand('copy');
+			document.body.removeChild(textArea);
+			showToast('Текст скопирован в буфер обмена');
+		}
+	}
+
+	function toggleTheme() {
+		const newTheme = state.theme === 'dark' ? 'light' : 'dark';
+		setTheme(newTheme);
+		if (tg && tg.HapticFeedback) {
+			tg.HapticFeedback.impactOccurred('light');
+		}
+	}
+
 	function bind() {
 		els.moodBtns.forEach(b => b.addEventListener('click', () => {
 			els.moodBtns.forEach(x => x.classList.remove('active'));
@@ -378,6 +422,8 @@
 		}));
 		els.saveBtn.addEventListener('click', onSaveEntryClick);
 		els.exportBtn.addEventListener('click', exportPdf);
+		els.themeBtn.addEventListener('click', toggleTheme);
+		els.shareBtn.addEventListener('click', shareBot);
 		els.buyPremiumBtn.addEventListener('click', buyPremium);
 		els.tabs.forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
 		if (tg && tg.onEvent) {
@@ -389,6 +435,7 @@
 		applyThemeFromTelegram();
 		load();
 		setPremium(state.premium);
+		setTheme(state.theme);
 		bind();
 		switchTab('today');
 	}

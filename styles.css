@@ -10,6 +10,18 @@
 	--bad: #eb5757;
 }
 
+:root[data-theme="light"] {
+	--bg: #ffffff;
+	--text: #1a1a1a;
+	--muted: #666666;
+	--card: #f8f9fa;
+	--border: #e1e5e9;
+	--primary: #0088cc;
+	--ok: #27ae60;
+	--warn: #f2c94c;
+	--bad: #eb5757;
+}
+
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 body {
@@ -31,7 +43,12 @@ body {
 	z-index: 10;
 }
 .brand { font-weight: 700; letter-spacing: 0.2px; }
-.ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; }
+.header-actions {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; font-size: 14px; }
 
 .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 12px 16px; position: sticky; top: 52px; background: var(--bg); z-index: 9; }
 .tab { background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 12px; padding: 10px 8px; }
@@ -56,7 +73,7 @@ textarea {
 	width: 100%;
 	resize: vertical;
 	min-height: 120px;
-	background: #0c0d0e;
+	background: var(--card);
 	color: var(--text);
 	border: 1px solid var(--border);
 	border-radius: 12px;
@@ -64,7 +81,7 @@ textarea {
 }
 
 .mood { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.mood-btn { border: 1px solid var(--border); background: #0c0d0e; color: var(--text); border-radius: 12px; padding: 10px 0; font-size: 22px; }
+.mood-btn { border: 1px solid var(--border); background: var(--card); color: var(--text); border-radius: 12px; padding: 10px 0; font-size: 22px; }
 .mood-btn.active { outline: 2px solid var(--primary); }
 
 .primary { background: var(--primary); color: #fff; border: none; border-radius: 12px; padding: 12px 16px; font-weight: 600; }
@@ -78,7 +95,7 @@ textarea {
 .calendar .day.bad { background: rgba(235, 87, 87, 0.12); }
 
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chips .chip { border: 1px solid var(--border); color: var(--text); background: #0c0d0e; padding: 8px 10px; border-radius: 999px; font-size: 12px; }
+.chips .chip { border: 1px solid var(--border); color: var(--text); background: var(--card); padding: 8px 10px; border-radius: 999px; font-size: 12px; }
 .chips .chip.active { outline: 2px solid var(--primary); }
 
 .list { list-style: none; padding: 0; margin: 0; }
